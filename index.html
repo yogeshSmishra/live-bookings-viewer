@@ -1,32 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Live Bookings Viewer</title>
-  <style>
-    /* Simple styling for the list */
-    #bookings { list-style: none; padding: 0; }
-    #bookings li { background: #eef; margin: 0.5em; padding: 0.5em; }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Live Bookings</h1>
-  <ul id="bookings"></ul>
+  <header>
+    <h1>Live Bookings</h1>
+    <!-- Dark mode toggle -->
+    <label class="switch">
+      <input type="checkbox" id="theme-toggle" />
+      <span class="slider"></span>
+    </label>
+  </header>
 
-  <!-- Socket.IO client library -->
+  <div id="bookings"></div>
+
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    // Connect to Socket.IO server
-    var socket = io();
-    // Listen for 'new-booking' events
-    socket.on('new-booking', function(booking) {
-      const list = document.getElementById('bookings');
-      const item = document.createElement('li');
-      item.textContent = booking.time + 
-                         ": " + booking.venueName + 
-                         " (Party of " + booking.partySize + ")";
-      // Prepend new booking to top of list
-      list.insertBefore(item, list.firstChild);
+    // --- Theme Toggle Logic ---
+    const toggle = document.getElementById('theme-toggle');
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    document.body.classList.add(currentTheme);
+    toggle.checked = (currentTheme === 'dark');
+
+    toggle.addEventListener('change', () => {
+      const theme = toggle.checked ? 'dark' : 'light';
+      document.body.classList.replace(theme === 'dark' ? 'light' : 'dark', theme);
+      localStorage.setItem('theme', theme);
     });
+    // ---------------------------
+
+    // --- Socket.IO Booking Logic ---
+    const socket = io();
+    socket.on('new-booking', booking => {
+      const container = document.getElementById('bookings');
+      const card = document.createElement('div');
+      card.classList.add('booking-card');
+      card.innerHTML = `
+        <strong>${booking.venueName}</strong>
+        <p>Party of ${booking.partySize}</p>
+        <time>${booking.time}</time>
+      `;
+      container.prepend(card);
+    });
+    // ---------------------------
   </script>
 </body>
 </html>

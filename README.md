@@ -28,14 +28,6 @@ A real-time full-stack web application that allows administrators to monitor and
 
 ---
 
-## 📷 Screenshot
-
-> Add a screenshot in the root folder and rename it `screenshot.png` to display here.
-
-![Screenshot](screenshot.png)
-
----
-
 ## 🔧 Installation & Running the Project
 
 ### 1. Clone the Repository
@@ -59,10 +51,12 @@ This will run the server on:
 Visit http://localhost:3000 in your web browser.
 New bookings will appear in real-time, every 5 seconds.
 
-
-### 🧪 Test Cases (Manual)
+---
+## 🧪 Test Cases (Manual)
 Open http://localhost:3000 in multiple browser tabs → All tabs show bookings in sync.
 
 Bookings appear every 5 seconds without refresh.
 
 Latest bookings appear at the top.
+---
+
